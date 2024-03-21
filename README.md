@@ -61,8 +61,15 @@ pip install -U pyinstaller
 The Build command is
 pyinstaller --name="ExploApp" --noconsole --onefile --path=env\lib\site-packages --add-data="static;static" --add-data="templates;templates" main.py
 
-For continue development
+To continue the development. 
+Go to main.py 
+and go to
+ if __name__ == "__main__":
 
+add comment
+ FlaskUI(app=app, server="flask",width=1400, height=1000).run()
+and remove comment
+ app.run(debug=True)
 
 
 ## Usage
@@ -75,13 +82,4 @@ When you launch the application for the first time, a new folder will be created
 
 You can add tags to your files to facilitate searching and sorting. When you add a tag, the name of your files changes and adds [your tag]. This decision is made in order to preserve tags even if your file changes folder.
 
-
-To continue the development. 
-Go to main.py 
-and go to
- if __name__ == "__main__":
-
-add comment
- FlaskUI(app=app, server="flask",width=1400, height=1000).run()
-and remove comment
- app.run(debug=True) 
+When you add or move folders, click on reset data in the application so that the program updates the file list.
