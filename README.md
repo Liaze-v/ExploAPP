@@ -22,7 +22,7 @@
 
 ## About The Project
 
-![Screen Shot](images/screenshot.png)
+![Screen Shot](./exemple.png)
 
 There are several solutions for file exploration but I couldn't find anything simple.
 
