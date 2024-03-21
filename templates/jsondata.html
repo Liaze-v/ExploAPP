@@ -1,0 +1,159 @@
+
+  <div class="container mx-auto mx-auto p-4">
+    <div class="mb-5">
+      <div class="sm:hidden">
+        <label for="Tab" class="sr-only">File type</label>
+        <select id="Tab" class="w-full rounded-md border-gray-200" multiple>
+          {% set querytypeAll =  '/datajson?search='~ qsearch %}
+          <option hx-get="{{ querytypeAll }}" hx-target="#datajson" select>ALL</option>
+          {% for tabfiletype in tabfiletypes %}
+          {% set querytype = '/datajson?search='~ qsearch ~ '&type=' ~ tabfiletype[1] %}
+          <option hx-get="{{ querytype }}" hx-target="#datajson" select>{{tabfiletype[0]}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="hidden sm:block">
+        <nav class="flex gap-6 justify-evenly items-center content-center flex-wrap" aria-label="Tabs">
+          {% set querytypeAll =  '/datajson?search='~ qsearch %}
+          <a
+            hx-get="{{ querytypeAll }}"
+            hx-target="#datajson"
+            hx-trigger="click"
+            class="shrink-0 cursor-pointer rounded-lg bg-sky-100 p-2 text-xl font-bold text-sky-900 text-center"
+            aria-current="page"
+          >
+            ALL
+          </a>
+          {% for tabfiletype in tabfiletypes %}
+          {% set querytype = '/datajson?search='~ qsearch ~ '&type=' ~ tabfiletype[1] %}
+          <a
+            hx-get="{{ querytype }}"
+            hx-target="#datajson"
+            class="shrink-0 cursor-pointer rounded-lg bg-sky-100 p-2 text-xl font-bold text-sky-900 text-center"
+            aria-current="page"
+          >
+            {{tabfiletype[0]}}
+          </a>
+          {% endfor %}
+        </nav>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-4 lg:grid-cols-[120px_1fr] lg:gap-8">
+      <div class="mb-5">
+        <div class="sm:hidden">
+          <label for="Tab2" class="sr-only">Tab</label>
+          <select id="Tab2" class="w-full rounded-md border-gray-200" multiple>
+            {% set querytagAll =  '/datajson?search='~ qsearch ~ '&type=' ~ qtype %}
+              <option hx-get="{{ querytagAll }}" hx-target="#datajson" select>ALL</option>
+            {% for fileTAG in fileTAGs %}
+              {% set querytag =  '/datajson?search='~ qsearch ~ '&type=' ~ qtype ~ '&tag=' ~ fileTAG %}
+              <option hx-get="{{ querytag }}" hx-target="#datajson" select>{{fileTAG}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="hidden sm:block">
+          <nav class="flex gap-6 flex-col" aria-label="Tabs">
+            {% set querytagAll =  '/datajson?search='~ qsearch ~ '&type=' ~ qtype %}
+              <a
+                hx-target="#datajson"
+                hx-get="{{ querytagAll }}"
+                hx-trigger="click"
+                class="shrink-0 cursor-pointer rounded-lg bg-sky-100 p-2 text-xl font-bold text-sky-900 text-center"
+                aria-current="page"
+              >
+                ALL
+              </a>
+            {% for fileTAG in fileTAGs %}
+            {% set querytag =  '/datajson?search='~ qsearch ~ '&type=' ~ qtype ~ '&tag=' ~ fileTAG %}
+            <a
+              hx-get="{{ querytag }}"
+              hx-target="#datajson"
+              class="shrink-0 cursor-pointer rounded-lg bg-sky-100 p-2 text-xl font-bold text-sky-900 text-center"
+              aria-current="page"
+            >
+              {{fileTAG}}
+            </a>
+            {% endfor %}
+          </nav>
+        </div>
+      </div>
+      <div class="bg-white max-h-[960px] myscroll overscroll-contain overflow-x-auto border-8 border-solid border-slate-950">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          {% set count = namespace(value=0) %}
+          {% for result in results %}
+          <div class="bg-white rounded-lg border p-4">
+            {% set imagepath =  '/static/asset/' ~ result.pathimg %}
+            {% set oppenfilelocation =  '/oppenfilelocation?filelocation=' ~ result.path %}
+            <img hx-get="{{oppenfilelocation}}" hx-trigger="click" class="cursor-pointer" src={{ imagepath }} alt="" srcset="">
+            <div class="px-1 py-4">
+              <div class="px-1 py-4 flex justify-start items-start space-x-1 flex-wrap">
+                {% for retag in result.tag %}
+                <span
+                  class="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700"
+                >
+                  {{retag}}
+                </span>
+                {% endfor %}
+                {% set idmodalbutton = '#myModal' ~ count.value %}
+                {% set idmodaldiv = 'myModal' ~ count.value %}
+                <button data-hystmodal={{ idmodalbutton }}
+                      class="text-slate-800 hover:text-red-600 text-sm bg-white font-medium px-2 py-2 inline-flex space-x-1 items-center">
+                      <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                              stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                          </svg>
+                      </span>
+                </button>
+                <div class="hystmodal" id={{ idmodaldiv }} aria-hidden="true">
+                  <div class="hystmodal__wrap">
+                    <div class="hystmodal__window" role="dialog" aria-modal="true">
+                        <button data-hystclose class="hystmodal__close">Close</button>
+                        <div class="mt-7 bg-white">
+                          <div class="p-4 sm:p-7">
+                            <div class="text-center">
+                              <h2 class="block text-2xl font-bold text-gray-800">Edit File</h2>
+                            </div>
+                            <div class="mt-5">
+                              <form hx-post="/newvalue" hx-target="#search">
+                                <div class="grid gap-y-4">
+                                      <input type="text" name="pathID" value="{{result.path}}" placeholder="Name Of file" class="hidden">
+                                      <input type="text" name="currentsea" value="{{qsearch}}" placeholder="Name Of file" class="hidden">
+                                      <input type="text" name="currentta" value="{{qtag}}" placeholder="Name Of file" class="hidden">
+                                      <input type="text" name="currenttyp" value="{{qtype}}" placeholder="Name Of file" class="hidden">
+                                      <div>Filename</div>
+                                      <input type="text" name="filename" value="{{result.customname}}" placeholder="Name Of file" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                      <div>TAG</div>
+                                      {% set countTAG = namespace(value=0) %}
+                                      {% for retag in result.tag %}
+                                      {% set nameTag = 'tag' ~ countTAG.value %}
+                                      <input type="text" name="{{nameTag}}" value="{{retag}}" placeholder="New Tag" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                      {% set countTAG.value = countTAG.value + 1 %}
+                                      {% endfor %}
+                                      {% set nameTag = 'tag' ~ countTAG.value %}
+                                      <input type="text" name="{{nameTag}}" value="" placeholder="New Tag" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                  <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              <div class="break-words font-bold text-xl mb-2">{{result.customname}}</div>
+            </div>
+          </div>
+          {% set count.value = count.value + 1 %}
+          {% endfor %}
+          <div id="moredata"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-none gap-4 m-auto grid-rows-none justify-items-center mt-5 mb-5">
+          <button hx-get="/datajson?number={{qnumber}}" hx-target="#datajson" hx-trigger="click" class="bg-[#0d1829] border-slate-50 border-4 hover:bg-[#E0F2FE] text-white hover:text-[#0d1829] font-bold py-2 px-4 rounded w-1/2">More Data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+

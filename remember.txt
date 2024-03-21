@@ -1,0 +1,19 @@
+###Creation
+##Creat env
+py -3 -m venv .venv
+
+##Activat env
+.venv\Scripts\activate
+
+pip install Flask
+pip install flaskwebgui
+pip install psutil
+pip install -U pyinstaller
+
+###Build
+pyinstaller --name="ExploApp" --noconsole --onefile --path=env\lib\site-packages --add-data="static;static" --add-data="templates;templates" main.py
+
+##Creatfile after Build
+#ExploApp.spec
+#dist 
+#build

@@ -1,0 +1,8 @@
+{% if search %}
+    <!-- {% set querysearch =  '/datajson?search=' ~ search %} -->
+    {% set querysearch =  '/datajson?search='~ search ~ '&type=' ~ type ~ '&tag=' ~ tag %}
+    <div id="datajson" hx-get="{{ querysearch }}" hx-trigger="load"></div>
+{% else %}
+{% set querysearch =  '/datajson?type=' ~ type ~ '&tag=' ~ tag %}
+    <div id="datajson" hx-get="{{ querysearch }}" hx-trigger="load"></div>
+{% endif %}
